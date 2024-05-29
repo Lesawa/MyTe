@@ -4,6 +4,7 @@ using MyTe.Models.Contexts;
 using MyTe.Models.Startup;
 using MyTe.Services;
 using MyTe.Models.Common;
+using MyTe.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -17,21 +17,21 @@ namespace MyTe.Controllers
         {
             return View();
         }
-
+        [Route("wbs")]
         public IActionResult ListarWBSs()
         {
             var lista = wbssService.Listar();
             return View(lista);
         }
 
-        [HttpGet]
-        //[Authorize(Roles ="Administrador")]
+        [HttpGet("wbs/adicionar/{id?}")]
+        
         public IActionResult IncluirWBS()
         {
             return View();
         }
 
-        [HttpPost]
+        [HttpPost("wbs/adicionar/{id?}")]
 
         public IActionResult IncluirWBS(WBS wbs)
         {
@@ -52,8 +52,8 @@ namespace MyTe.Controllers
             };
         }
         // Action para alterar a descrição de uma área
-        [HttpGet]
-        //[Authorize(Roles = "Administrador")]
+        [HttpGet("wbs/alterar/{id?}")]
+
         public IActionResult AlterarWBS(int id)
         {
             try
@@ -78,7 +78,7 @@ namespace MyTe.Controllers
             };
         }
 
-        [HttpPost]
+        [HttpPost("wbs/alterar/{id?}")]
 
         public IActionResult AlterarWBS(WBS wbs)
         {
@@ -100,8 +100,8 @@ namespace MyTe.Controllers
 
         }
 
-        [HttpGet]
-        //[Authorize(Roles = "Administrador")]
+        [HttpGet("wbs/remover/{id?}")]
+
         public IActionResult RemoverWBS(int id)
         {
             try
@@ -123,7 +123,7 @@ namespace MyTe.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("wbs/remover/{id?}")]
         public IActionResult RemoverWBS(WBS wbs)
         {
             try

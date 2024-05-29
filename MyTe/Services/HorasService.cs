@@ -46,12 +46,13 @@ namespace MyTe.Services
                             Id = h.Id,
                             WBSId = w.Id,
                             CodigoWBSId = w.CodigoWBS,
-                            DescricaoWBS = w.Descricao,
+                            DescricaoWBS = w.Descricao,                            
                             RegistroData = h.RegistroData,
                             HorasTrabalhadas = h.HorasTrabalhadas,
                             FuncionarioId = f.Id,
                             NomeFuncionario = f.Nome,
-                            EmailFuncionario = f.Email
+                            EmailFuncionario = f.Email,
+                            WBSTipo = w.Tipo == 1? "Alocado" : "Não Alocado"
                         };
             if (idFuncionario > 0)
             {

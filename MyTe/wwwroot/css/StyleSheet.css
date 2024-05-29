@@ -10,37 +10,31 @@ a:hover {
 
 
 /*Todas as Body */
-/*body{
+body {
     margin: 0;
     padding: 0;
-    background-color: white;
-}*/
-
-Somente o bem-vindo Body
-body.home {
-    background-image: url('../avnd0001 _avanade master dwm endboard 2024 copyright 16x9.gif');
-    background-size: cover;
-    background-repeat: no-repeat;
+    background-image: url('avanade logo lines general left 02-02.png');
 }
 
 
 /*Tabela de Horas linq*/
 /*Tamanho da tabela*/
 .tabelas {
+    width: auto;
+    color: white;
     width: 100%;
     border-collapse: collapse;
 }
 
     /*Coluna tabela*/
     .tabelas td {
-        border: 1px solid #ddd;
+        color: black;
         padding: 8px;
         text-align: left;
     }
     /*Linha tabela*/
     .tabelas th {
-        background-color: #ff5800;
-        border: 1px solid #ddd;
+        background-color: #890078;
         padding: 8px;
         text-align: left;
     }
@@ -48,16 +42,45 @@ body.home {
     .tabelas tbody tr:nth-child(even) {
         background-color: #f9f9f9;
     }
+    .tabelas tbody tr:nth-child(odd) {
+        background-color: white;
+    }
 
+/*Botões lixeira e lápis*/
 i {
     font-size: 1.5rem;
     color: #ff5800;
     transition: color 0.3s ease;
 }
 
-
-
 .custom-icon:hover {
     color: #890078;
-} 
+}
+
+
+/*Login e Registrar */
+.cor {
+    background-image: linear-gradient(to right, rgba(255, 88, 0, 0.5), rgba(137, 0, 120, 1)), url('../css/Avanade Logo lines Master C3 Alpha Centered.gif');
+}
+
+/*Alterar e Adicionar */
+.center-div {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.card {
+    width: 500px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 10px; /* Borda arredondada */
+    box-shadow: 0 10px 4px rgba(0,0,0,0.2); /* Sombra */
+    padding: 100px;
+}
+
+.card-body {
+    padding: 0; /* Remover espaço interno padrão */
+}
 

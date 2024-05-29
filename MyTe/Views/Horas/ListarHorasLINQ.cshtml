@@ -9,76 +9,88 @@
 
 <head>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"></head>
-<body> 
- 
-    <p>
-        @using (Html.BeginForm("ListarHorasLINQ", "Horas", FormMethod.Get))
-        {
-            <div class="mb-3">
-                @Html.Label("hora", "Escolha o funcionário:", new { style = "font-weight: bold;" })
-                @Html.DropDownList("idFuncionario",
-                         (SelectList)ViewBag.ListaDeFuncionario,
-                         "TODOS", new { @class = "form-select" })
-            </div>
-            <div class="mb-3">
-                <button type="button" value="Buscar" class="btn btn-primary" data-mdb-ripple-init>
-                    <i class="fas fa-search"></i>
-                </button>
-            </div> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        /* Estilo para centralizar o ícone no botão */
+        .btn-search {
+            padding: 7px 12px;
         }
-    </p> 
-    <table class="tabelas">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.CodigoWBSId)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DescricaoWBS)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.NomeFuncionario)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.RegistroData)                
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.HorasTrabalhadas)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
+    </style>
+</head>
+<body> 
+    <div class="container">
+        <p>
+            @using (Html.BeginForm("ListarHorasLINQ", "Horas", FormMethod.Get))
             {
-                <tr>
-                    <td>
-                       @Html.DisplayFor(modelItem => item.CodigoWBSId)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DescricaoWBS)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.NomeFuncionario)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.RegistroData)
-                    </td>
-                    <td>
-                    <center>
-                        @Html.DisplayFor(modelItem => item.HorasTrabalhadas)
-                    </center>
-                    </td>
-                    <td>
-                         <center> 
-                        <a asp-action="RemoverHora" asp-route-id="@item.Id"><i class="bi bi-trash3-fill custom-icon"></i></a>
-                        </center>
-                    </td>
-                </tr>
+                <div class="mb-3">
+                    @Html.Label("hora", "Escolha o funcionário:", new { style = "font-weight: bold;" })
+                    @Html.DropDownList("idFuncionario",
+                             (SelectList)ViewBag.ListaDeFuncionario,
+                             "TODOS", new { @class = "form-select" })
+                </div>
+                <div class="mb-3">
+                    <input type="submit" value="Buscar" class="btn btn-primary" />
+                </div> 
             }
-        </tbody>
-    </table> 
+        </p> 
+        <table class="tabelas">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CodigoWBSId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DescricaoWBS)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.NomeFuncionario)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.WBSTipo)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RegistroData)                
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.HorasTrabalhadas)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                           @Html.DisplayFor(modelItem => item.CodigoWBSId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DescricaoWBS)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NomeFuncionario)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.WBSTipo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.RegistroData)
+                        </td>
+                        <td>
+                        <center>
+                            @Html.DisplayFor(modelItem => item.HorasTrabalhadas)
+                        </center>
+                        </td>
+                        <td>
+                             <center> 
+                            <a asp-action="RemoverHora" asp-route-id="@item.Id"><i class="bi bi-trash3-fill custom-icon"></i></a>
+                            </center>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table> 
+    </div>
    @*  <p>
         <a asp-action="AdicionarHora" class="btn btn-success">Lançar Horas</a>
     </p> *@

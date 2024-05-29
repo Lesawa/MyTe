@@ -4,12 +4,16 @@
     ViewData["Title"] = "Remover Hora";
 }
 
-<h3>Tem ceteza que deseja remover a hora registrada?</h3>
-<div>
-   
+<body class="remover">
+<div style="text-align: center;">
+
+<h2>Tem ceteza que deseja remover a hora registrada?</h2>
+<div class="mt-4">   
     <form asp-action="RemoverHora">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Sim, remover" class="btn btn-danger" /> |
-        <a asp-action="ListarHorasLINQ">Não, voltar para a lista</a>
+        <a asp-action="ListarHorasLINQ" class="btn btn-primary">Não, voltar para a lista</a>
     </form>
 </div>
+</div>
+</body>

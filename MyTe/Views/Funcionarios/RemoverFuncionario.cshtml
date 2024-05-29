@@ -4,13 +4,16 @@
     ViewData["Title"] = "Remover Funcionário";
 }
 
-<h3>Tem ceteza que deseja remover '@Model.Nome' ?</h3>
-<div>
+<body class="remover">
+<div style="text-align: center;">
 
-
+<h2>Tem ceteza que deseja remover '@Model.Nome' ?</h2>
+<div class="mt-4">
     <form asp-action="RemoverFuncionario">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Sim, remover" class="btn btn-danger" /> |
-        <a asp-action="ListarFuncionarios">Não, voltar para a lista</a>
+        <a asp-action="ListarFuncionarios" class="btn btn-primary">Não, voltar para a lista</a>
     </form>
 </div>
+</div>
+</body>

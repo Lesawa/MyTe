@@ -26,7 +26,7 @@ namespace MyTe.Controllers
             return View();
         }
 
-        [HttpGet]
+        [HttpGet("horas/adicionar/{id?}")]
         public IActionResult AdicionarHora()
         {
             var listaDeWBS = wbssService.Listar().Select(wbs => new {
@@ -39,7 +39,7 @@ namespace MyTe.Controllers
             return View();
         }
 
-        [HttpPost]
+        [HttpPost("horas/adicionar/{id?}")]
         public IActionResult AdicionarHora(LancamentoDeHora hora)
         {
             try
@@ -64,6 +64,7 @@ namespace MyTe.Controllers
         }
 
         [HttpGet]
+        [Route("horas")]
         public IActionResult ListarHoras(int idWBS)
         {
             // o parametro id se refere ao id da área
@@ -93,7 +94,7 @@ namespace MyTe.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("horas/remover/{id?}")]
         public IActionResult RemoverHora(int id)
         {
             try
@@ -115,7 +116,7 @@ namespace MyTe.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("horas/remover/{id?}")]
         public IActionResult RemoverHora(LancamentoDeHora hora)
         {
             try

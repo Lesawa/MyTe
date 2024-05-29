@@ -50,6 +50,12 @@ namespace MyTe.Controllers
         [HttpGet]
         public IActionResult Login(string? returnUrl = null) 
         { 
+            //Verificar se há uma mensagem de sucesso na TempData
+            if(TempData.ContainsKey("SucessMessage"))
+            {
+                ViewBag.SuccessMessage = TempData["SucessMessage"];
+            }
+
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
@@ -65,7 +71,10 @@ namespace MyTe.Controllers
                 //object LoginResult = null;
                 if (loginSuccess)
                 {
-                    Utils.UsuarioLogado!.Usuario = User.Identity!.Name;
+                    //Extrair a primeira parte do email do "@"
+                    string userEmail = User.Identity!.Name;
+                    string username = userEmail.Split('@')[0];
+                    Utils.UsuarioLogado!.Usuario = username;
 
                     if (returnUrl != null)
                     {
@@ -74,14 +83,21 @@ namespace MyTe.Controllers
 
                     if (User.IsInRole("Administrador"))
                     {
-                        TempData["SucessMessage"] = "Login bem-sucedido!";
+                        TempData["SucessMessage"] = "Login bem-sucedido como Administrador!";
                         return RedirectToAction("ListarHorasLINQ", "Horas");
                     }
+                    else if (User.IsInRole("Gerente"))
+                    {
+                        TempData["SucessMessage"] = "Login bem-sucedido como Gerente!";
+                        return RedirectToAction("ListarHorasLINQ", "Horas");
+                    }
+                    // Adicione aqui a ação a ser tomada para um gerente
                     else
                     {
-                        TempData["SucessMessage"] = "Login bem-sucedido!";
+                        TempData["SucessMessage"] = "Login bem-sucedido como Usuário!";
                         return RedirectToAction("ListarHoras", "Horas");
                     }
+
                 }
                 else
                 {

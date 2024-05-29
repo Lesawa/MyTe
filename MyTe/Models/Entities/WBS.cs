@@ -16,7 +16,7 @@ namespace MyTe.Models.Entities
         [Required(ErrorMessage = "Campo obrigatório", AllowEmptyStrings = false)]
         public string? Descricao { get; set; }
 
-        //[DisplayName("Tipo de WBS")]
+        [DisplayName("Situação")]
         [Range(1, 2, ErrorMessage = "O tipo do WBS deve ser preenchido")]//mínimo e máximo do campo
         public int Tipo { get; set; }
         public ICollection<LancamentoDeHora>? Horas { get; set; }

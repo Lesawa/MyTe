@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyTe.Models.Contexts;
+using MyTe.Models.Entities;
 using System.Runtime.CompilerServices;
 
 namespace MyTe.DAL
@@ -44,6 +45,11 @@ namespace MyTe.DAL
         {
             Context.Entry<T>(item).State = EntityState.Deleted;
             Context.SaveChanges();
+        }
+
+        public static implicit operator GenericDao<T>(GenericDao<FortnightViewModel> v)
+        {
+            throw new NotImplementedException();
         }
     }
 }

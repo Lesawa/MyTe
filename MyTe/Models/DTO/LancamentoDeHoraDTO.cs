@@ -17,6 +17,10 @@ namespace MyTe.Models.DTO
         [DisplayName("Descrição")]
         public string? DescricaoWBS { get; set; }
 
+        [Range(1, 2)]
+        [DisplayName("Situação")]
+        public string? WBSTipo { get; set; }
+
         [DisplayName("Funcionário")]
         public int FuncionarioId { get; set; }
 

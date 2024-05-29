@@ -10,6 +10,7 @@ namespace MyTe.Models.Entities
 
         [Required]
         [EmailAddress]
+        [Display(Name = "E-mail")]
         public string? Email { get; set; }
 
         [Required]
@@ -20,6 +21,9 @@ namespace MyTe.Models.Entities
         [Display(Name = "Confirmar Senha")]
         [Compare("Senha")]
         public string? ConfirmarSenha { get; set; }
+
+        [Display(Name = "Selecione um perfil")]
         public string? Perfil { get; set; }
+
     }
 }

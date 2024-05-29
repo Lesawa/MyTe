@@ -10,7 +10,7 @@ namespace MyTe.Models.Common
             var roleManager = serviceProvider
                 .GetRequiredService<RoleManager<IdentityRole>>();
 
-            string[] roleNames = {"Administrador", "Usuário"};
+            string[] roleNames = {"Administrador", "Usuário", "Gerente"};
 
             IdentityResult result;
 

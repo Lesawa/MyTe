@@ -21,16 +21,14 @@ namespace MyTe.Controllers
         {
             return View();
         }
-
-        [Authorize(Roles = "Administrador")]
+        [Route("funcionarios")]
         public IActionResult ListarFuncionarios()
         {
             var lista = funcionariosService.Listar();
             return View(lista);
         }
 
-        [HttpGet]
-        [Authorize(Roles = "Administrador")]
+        [HttpGet("funcionarios/incluir/{id?}")]
         public IActionResult IncluirFuncionario()
         {
             return View();
@@ -57,8 +55,7 @@ namespace MyTe.Controllers
             };
         }
         // Action para alterar a descrição de uma área
-        [HttpGet]
-        [Authorize(Roles = "Administrador")]
+        [HttpGet("funcionarios/alterar/{id?}")]
         public IActionResult AlterarFuncionario(int id)
         {
             try
@@ -83,7 +80,7 @@ namespace MyTe.Controllers
             };
         }
 
-        [HttpPost]
+        [HttpPost("funcionarios/alterar/{id?}")]
 
         public IActionResult AlterarFuncionario(Funcionario funcionario)
         {
@@ -104,8 +101,7 @@ namespace MyTe.Controllers
             };
 
         }
-        [HttpGet]
-        [Authorize(Roles = "Administrador")]
+        [HttpGet("funcionarios/remover/{id?}")]
         public IActionResult RemoverFuncionario(int id)
         {
             try
@@ -127,7 +123,7 @@ namespace MyTe.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("funcionarios/remover/{id?}")]
         public IActionResult RemoverFuncionario(Funcionario funcionario)
         {
             try
