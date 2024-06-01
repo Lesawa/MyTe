@@ -3,6 +3,7 @@
 @{
     var user = User as IPrincipal;
     var isAdmin = user.IsInRole("Administrador");
+    var isGeren = user.IsInRole("Gerente");
 }
 
 <!DOCTYPE html>
@@ -15,6 +16,7 @@
     <link rel="stylesheet" href="~/css/StyleSheet.css" asp-append-version="true" />  
 </head>
 <body>
+    @await RenderSectionAsync("SuccessMessage", required: false)
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
@@ -29,30 +31,39 @@
                     <ul class="navbar-nav flex-grow-1">
                         @if (user.Identity.IsAuthenticated)
                              @if (isAdmin)
-                                {
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-area="" asp-controller="Horas" asp-action="AdicionarHora">Lançamento</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-area="" asp-controller="Horas" asp-action="ListarHorasLINQ">Gestão</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-area="" asp-controller="TiposWBS" asp-action="ListarWBSs">WBS</a>
+                                </li>        
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-area="" asp-controller="Funcionarios" asp-action="ListarFuncionarios">Funcionários</a>
+                                </li>
                                     <li class="nav-item">
-                                        <a class="nav-link text-white" asp-area="" asp-controller="Horas" asp-action="ListarHorasLINQ">Gestão de Horas</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link text-white" asp-area="" asp-controller="TiposWBS" asp-action="ListarWBSs">WBS</a>
-                                    </li>        
-                                    <li class="nav-item">
-                                        <a class="nav-link text-white" asp-area="" asp-controller="Funcionarios" asp-action="ListarFuncionarios">Funcionários</a>
-                                    </li>
-                                     <li class="nav-item">
-                                    <a class="nav-link text-white" asp-area="" asp-controller="Autenticacao" asp-action="Registrar">Novo Usuário</a>                                    
-                                    </li>
-                                }
-                                else
-                                {
-                                    <partial name="_LayoutPartial"/>
-                                }
+                                <a class="nav-link text-white" asp-area="" asp-controller="Autenticacao" asp-action="Registrar">Novo Usuário</a>                                    
+                                </li>
+                            }
+                            else if (isGeren)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-area="" asp-controller="Horas" asp-action="AdicionarHora">Lançamento de Horas</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-white" asp-area="" asp-controller="Horas" asp-action="ListarHorasLINQ">Gestão de Horas</a>
+                                </li>
+                            }
+                            else
+                            {
+                                <partial name="_LayoutPartial" />
+                            }
                     </ul>
                     <partial name="_LoginPartial"/>
                 </div>
-            </div>
-            <div>
-                <a class="nav-link text-white" asp-area="" asp-controller="Quinzenas" asp-action="Index">Quinzena</a>
             </div>
         </nav>
     </header>
@@ -66,5 +77,19 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+   
+
+    @* Adicione esta seção no seu layout *@
+    @section SuccessMessage {
+        @if (TempData["LoginSuccess"] != null)
+        {
+            <div id="mensagem" class="alert alert-success">@TempData["LoginSuccess"]</div>
+            <script>
+                setTimeout(function () {
+                    document.getElementById('mensagem').style.display = 'none';
+                }, 3000); // 3000 milissegundos = 3 segundos
+            </script>
+        }
+    }
 </body>
 </html>

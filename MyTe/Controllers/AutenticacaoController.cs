@@ -25,6 +25,13 @@ namespace MyTe.Controllers
         [HttpGet]
         public IActionResult Registrar()
         {
+            // Verifique se há uma mensagem de boas-vindas no TempData
+            if (TempData["WelcomeMessage"] != null)
+            {
+                ViewBag.WelcomeMessage = TempData["WelcomeMessage"]; // Passar a mensagem para a View
+                TempData.Remove("WelcomeMessage"); // Limpar o TempData para evitar exibir a mensagem novamente
+            }
+
             ViewBag.Roles = new SelectList(authService.ListRoles());
             return View();
         }
@@ -37,23 +44,25 @@ namespace MyTe.Controllers
                 var novo = await authService.CreateUser(model);
                 if (novo.Success)
                 {
-                    return RedirectToAction("Login", "Autenticacao");
+                    // Defina a mensagem de boas-vindas no TempData
+                    TempData["WelcomeMessage"] = "Seja bem-vindo(a)! Seu registro foi concluído com sucesso.";
+                    return RedirectToAction("Registrar");
                 }
                 foreach (var error in novo.Errors!)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
-            return Registrar();
+            return View(model);
         }
 
         [HttpGet]
         public IActionResult Login(string? returnUrl = null) 
         { 
             //Verificar se há uma mensagem de sucesso na TempData
-            if(TempData.ContainsKey("SucessMessage"))
+            if(TempData.ContainsKey("SuccessMessage"))
             {
-                ViewBag.SuccessMessage = TempData["SucessMessage"];
+                ViewBag.SuccessMessage = TempData["SuccessMessage"];
             }
 
             ViewBag.ReturnUrl = returnUrl;
@@ -67,8 +76,7 @@ namespace MyTe.Controllers
             if (ModelState.IsValid)
             {
                 var loginSuccess = await authService.LoginUser(model);
-
-                //object LoginResult = null;
+               
                 if (loginSuccess)
                 {
                     //Extrair a primeira parte do email do "@"
@@ -76,26 +84,21 @@ namespace MyTe.Controllers
                     string username = userEmail.Split('@')[0];
                     Utils.UsuarioLogado!.Usuario = username;
 
-                    if (returnUrl != null)
-                    {
-                        return Redirect(returnUrl);
-                    }
-
                     if (User.IsInRole("Administrador"))
                     {
-                        TempData["SucessMessage"] = "Login bem-sucedido como Administrador!";
-                        return RedirectToAction("ListarHorasLINQ", "Horas");
+                        TempData["LoginSuccess"] = "Login bem-sucedido como Administrador!";
+                        return RedirectToAction("Login");
                     }
                     else if (User.IsInRole("Gerente"))
                     {
-                        TempData["SucessMessage"] = "Login bem-sucedido como Gerente!";
-                        return RedirectToAction("ListarHorasLINQ", "Horas");
+                        TempData["LoginSuccess"] = "Login bem-sucedido como Gerente!";
+                        return RedirectToAction("Login");
                     }
                     // Adicione aqui a ação a ser tomada para um gerente
                     else
                     {
-                        TempData["SucessMessage"] = "Login bem-sucedido como Usuário!";
-                        return RedirectToAction("ListarHoras", "Horas");
+                        TempData["LoginSuccess"] = "Login bem-sucedido como Funcionário!";
+                        return RedirectToAction("Login");
                     }
 
                 }

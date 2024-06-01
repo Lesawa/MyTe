@@ -8,9 +8,11 @@ namespace MyTe.Services
     public class FuncionariosService
     {
         public GenericDao<Funcionario> FuncionariosDao { get; set; }
+        public MyTeContext Context { get; set; }
         public FuncionariosService(MyTeContext context)
         {
             this.FuncionariosDao = new GenericDao<Funcionario>(context);
+            Context = context;
         }
         public IEnumerable<Funcionario> Listar()
         {
@@ -45,6 +47,10 @@ namespace MyTe.Services
                 });
             }
             return funcionarios;
+        }
+        public Funcionario? BuscarPorEmail(string email)
+        {
+            return Context.Funcionarios.FirstOrDefault(x => x.Email == email);
         }
     }
 }

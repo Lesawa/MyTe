@@ -21,6 +21,32 @@ namespace MyTe.Controllers
         {
             return View();
         }
+
+        [HttpGet]
+        public IActionResult BuscarPorEmail(string email)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(email))
+                {
+                    throw new ArgumentException("O e-mail fornecido é inválido");
+                }
+
+                Funcionario? funcionario = funcionariosService.BuscarPorEmail(email);
+
+                if (funcionario == null)
+                {
+                    return NotFound($"Nenhum funcionário encontrado com o e-mail '{email}'");
+                }
+
+                return View(funcionario);
+            }
+            catch (Exception e)
+            {
+                return View("_Erro", e);
+            }
+        }
+
         [Route("funcionarios")]
         public IActionResult ListarFuncionarios()
         {
@@ -128,6 +154,7 @@ namespace MyTe.Controllers
         {
             try
             {
+                string urlAnterior = Request.Headers["Refere"].ToString();
                 funcionariosService.Remover(funcionario);
                 return RedirectToAction("ListarFuncionarios");
             }

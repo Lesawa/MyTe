@@ -3,6 +3,7 @@ using MyTe.DAL;
 using MyTe.Models.Contexts;
 using MyTe.Models.DTO;
 using MyTe.Models.Entities;
+using System.Text.Json;
 
 
 namespace MyTe.Services
@@ -11,15 +12,18 @@ namespace MyTe.Services
     {
         public GenericDao<LancamentoDeHora> HorasDao { get; set; }
         public MyTeContext Context { get; set; }
+
         public HorasService(MyTeContext context)
         {
             this.HorasDao = new GenericDao<LancamentoDeHora>(context);
             this.Context = context;
         }
+
         public void Adicionar(LancamentoDeHora hora)
         {
             HorasDao.Adicionar(hora);
         }
+
         public IEnumerable<LancamentoDeHora> ListarHoras(int idWBS)
         {
             if (idWBS > 0)
@@ -28,14 +32,17 @@ namespace MyTe.Services
             }
             return HorasDao.Listar();
         }
+
         public void Remover(LancamentoDeHora hora)
         {
             HorasDao.Remover(hora);
         }
+
         public LancamentoDeHora? Buscar(int id)
         {
             return HorasDao.Buscar(id);
         }
+
         public IEnumerable<LancamentoDeHoraDTO> ListarHorasLINQ(int idFuncionario)
         {
             var lista = from w in Context.WBSs
@@ -46,20 +53,38 @@ namespace MyTe.Services
                             Id = h.Id,
                             WBSId = w.Id,
                             CodigoWBSId = w.CodigoWBS,
-                            DescricaoWBS = w.Descricao,                            
+                            DescricaoWBS = w.Descricao,
                             RegistroData = h.RegistroData,
                             HorasTrabalhadas = h.HorasTrabalhadas,
                             FuncionarioId = f.Id,
                             NomeFuncionario = f.Nome,
-                            EmailFuncionario = f.Email,
-                            WBSTipo = w.Tipo == 1? "Alocado" : "Não Alocado"
+                            EmailFuncionario = f.Email
                         };
             if (idFuncionario > 0)
             {
                 return lista.Where(p => p.FuncionarioId == idFuncionario).ToList();
             }
             return lista.ToList();
+        }
 
+        public IEnumerable<LancamentoDeHora> ListarHorasPorFuncionario(int funcionarioId)
+        {
+            // Aqui você faria a consulta no banco de dados para recuperar as horas do funcionário
+            // Por exemplo, usando Entity Framework, você pode fazer algo assim:
+            return Context.Horas.Where(hora => hora.FuncionarioId == funcionarioId).ToList();
+        }
+
+        public IEnumerable<LancamentoDeHora> ListarHorasPorPeriodo(int funcionarioId, DateTime startDate, DateTime endDate)
+        {
+            Console.WriteLine($"Consulta por Funcionario ID: {funcionarioId}, Start Date: {startDate}, End Date: {endDate}");
+
+            var resultado = Context.Horas
+                .Where(hora => hora.FuncionarioId == funcionarioId && hora.RegistroData >= startDate && hora.RegistroData <= endDate)
+                .ToList();
+
+            Console.WriteLine($"Resultado da Consulta: {JsonSerializer.Serialize(resultado)}");
+
+            return resultado;
         }
     }
 }

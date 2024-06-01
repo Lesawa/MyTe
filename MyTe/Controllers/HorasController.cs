@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using MyTe.Models.Common;
 using MyTe.Models.Entities;
 using MyTe.Services;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace MyTe.Controllers
 {
@@ -11,6 +14,7 @@ namespace MyTe.Controllers
         private readonly WBSsService wbssService;
         private readonly FuncionariosService funcionariosService;
         private readonly HorasService horasService;
+
         public HorasController(
             HorasService horasService,
             FuncionariosService funcionariosService,
@@ -26,36 +30,61 @@ namespace MyTe.Controllers
             return View();
         }
 
-        [HttpGet("horas/adicionar/{id?}")]
+        [HttpGet]
         public IActionResult AdicionarHora()
         {
-            var listaDeWBS = wbssService.Listar().Select(wbs => new {
+            var listaDeWBS = wbssService.Listar().Select(wbs => new
+            {
                 Id = wbs.Id,
                 CodigoDescricao = $"{wbs.CodigoWBS} - {wbs.Descricao}"
             }).ToList();
 
             ViewBag.ListaDeWBS = new SelectList(listaDeWBS, "Id", "CodigoDescricao");
 
+            var horasSalvas = horasService.ListarHoras(0); // Carrega todas as horas
+            ViewBag.HorasSalvas = horasSalvas;
+
             return View();
         }
 
-        [HttpPost("horas/adicionar/{id?}")]
-        public IActionResult AdicionarHora(LancamentoDeHora hora)
+        [HttpPost]
+        public IActionResult AdicionarHora([FromBody] List<LancamentoDeHora> horas)
         {
             try
             {
-                if (hora.WBSId == 0)
+                var userLog = Utils.USERNAME;
+                if (string.IsNullOrEmpty(userLog))
                 {
-                    ModelState.AddModelError("WBSId", "Nenhuma WBS foi selecionada");
+                    return BadRequest("User log is not available.");
+                }
+
+                var userEmailObject = funcionariosService.BuscarPorEmail(userLog);
+                var userIdFuncionario = userEmailObject!.Id;
+
+                if (userEmailObject == null)
+                {
+                    return BadRequest("User not found.");
+                }
+
+                if (horas == null || !horas.Any())
+                {
+                    ModelState.AddModelError("Horas", "Nenhuma hora foi registrada");
                 }
 
                 if (!ModelState.IsValid)
                 {
-                    return AdicionarHora();
+                    return BadRequest(ModelState);
                 }
 
-                horasService.Adicionar(hora);
-                return RedirectToAction("ListarHoras");
+                horas!.ForEach(hora => hora.FuncionarioId = userIdFuncionario);
+                horas.ForEach(hora => horasService.Adicionar(hora));
+
+                var options = new JsonSerializerOptions
+                {
+                    ReferenceHandler = ReferenceHandler.Preserve
+                };
+
+                return Json(new { success = true, data = horas }, options);
             }
             catch (Exception e)
             {
@@ -64,10 +93,27 @@ namespace MyTe.Controllers
         }
 
         [HttpGet]
-        [Route("horas")]
+        public IActionResult ListarHorasDoFuncionario()
+        {
+            try
+            {
+                var userLog = Utils.USERNAME;
+                var userEmailObject = funcionariosService.BuscarPorEmail(userLog!);
+                var funcionarioId = userEmailObject!.Id;
+
+                var horasDoFuncionario = horasService.ListarHorasPorFuncionario(funcionarioId);
+
+                return Json(new { success = true, data = horasDoFuncionario });
+            }
+            catch (Exception e)
+            {
+                return Json(new { success = false, message = e.Message });
+            }
+        }
+
+        [HttpGet]
         public IActionResult ListarHoras(int idWBS)
         {
-            // o parametro id se refere ao id da área
             try
             {
                 ViewBag.ListaDeWBS = new SelectList(wbssService.ListarWBSsDTO(), "Id", "Descricao");
@@ -79,13 +125,11 @@ namespace MyTe.Controllers
             }
         }
 
-
-        public IActionResult ListarHorasLINQ(int idFuncionario)//ajustar
+        public IActionResult ListarHorasLINQ(int idFuncionario)
         {
             try
             {
-                ViewBag.ListaDeFuncionario =
-                    new SelectList(funcionariosService.ListarFuncionariosDTO(), "Id", "Nome");
+                ViewBag.ListaDeFuncionario = new SelectList(funcionariosService.ListarFuncionariosDTO(), "Id", "Nome");
                 return View(horasService.ListarHorasLINQ(idFuncionario));
             }
             catch (Exception e)
@@ -94,7 +138,7 @@ namespace MyTe.Controllers
             }
         }
 
-        [HttpGet("horas/remover/{id?}")]
+        [HttpGet]
         public IActionResult RemoverHora(int id)
         {
             try
@@ -116,7 +160,7 @@ namespace MyTe.Controllers
             }
         }
 
-        [HttpPost("horas/remover/{id?}")]
+        [HttpPost]
         public IActionResult RemoverHora(LancamentoDeHora hora)
         {
             try
@@ -129,5 +173,36 @@ namespace MyTe.Controllers
                 return View("_Erro", e);
             }
         }
+
+        // Método para buscar horas salvas por período
+        [HttpGet]
+        public IActionResult GetHorasSalvas(string startDate, string endDate)
+        {
+            try
+            {
+                var userLog = Utils.USERNAME;
+                var userEmailObject = funcionariosService.BuscarPorEmail(userLog!);
+                var funcionarioId = userEmailObject!.Id;
+
+                // Parse the date strings into DateTime
+                DateTime startDateTime = DateTime.Parse(startDate);
+                DateTime endDateTime = DateTime.Parse(endDate);
+
+                // Log para verificação
+                Console.WriteLine($"Funcionario ID: {funcionarioId}");
+                Console.WriteLine($"Start Date: {startDateTime}, End Date: {endDateTime}");
+
+                var horasSalvas = horasService.ListarHorasPorPeriodo(funcionarioId, startDateTime, endDateTime);
+
+                Console.WriteLine($"Horas Salvas: {JsonSerializer.Serialize(horasSalvas)}");
+
+                return Json(new { success = true, data = horasSalvas });
+            }
+            catch (Exception e)
+            {
+                return Json(new { success = false, message = e.Message });
+            }
+        }
+
     }
 }

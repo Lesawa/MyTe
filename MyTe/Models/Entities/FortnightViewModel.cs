@@ -10,12 +10,3 @@ namespace MyTe.Models.Entities
         public string? Title { get; set; }
     }
 }
-//public DateTime FirstFortnightStart { get; set; }
-//        public DateTime FirstFortnightEnd { get; set; }
-//        public DateTime SecondFortnightStart { get; set; }
-//        public DateTime SecondFortnightEnd { get; set; }
-        //public DateTime FirstFortnight { get; set; }
-//        //public DateTime SecondFortnight { get; set; }
-
-//    }
-//}

@@ -62,6 +62,7 @@ namespace MyTe.Services
 
             if (result.Succeeded)
             {
+                Utils.USERNAME = model.Email;
                 return true;
             }
             return false;

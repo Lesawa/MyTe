@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MyTe.Models.Entities;
 using MyTe.Services;
+using System.Diagnostics;
 
 namespace MyTe.Controllers
 {
@@ -43,7 +44,11 @@ namespace MyTe.Controllers
                 }
 
                 wbssService.Incluir(wbs);
-                return RedirectToAction("ListarWBSs");//Requisição GET
+
+                // Definindo a mensagem de sucesso na TempData
+                TempData["SuccessMessage"] = "WBS incluída com sucesso!";
+
+                return RedirectToAction("IncluirWBS");//Requisição GET
             }
             catch (Exception)
             {
@@ -90,7 +95,11 @@ namespace MyTe.Controllers
                 }
 
                 wbssService.Alterar(wbs);
-                return RedirectToAction("ListarWBSs");//Requisição GET
+
+                // Definindo a mensagem de sucesso na TempData
+                TempData["SuccessMessage"] = "WBS alterada com sucesso!";
+
+                return RedirectToAction("AlterarWBS");//Requisição GET
             }
             catch (Exception)
             {

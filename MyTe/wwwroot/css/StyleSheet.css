@@ -64,9 +64,10 @@ i {
 }
 
 /*Alterar e Adicionar */
+
 .center-div {
     position: absolute;
-    top: 60%;
+    top: 55%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
@@ -78,9 +79,11 @@ i {
     border-radius: 10px; /* Borda arredondada */
     box-shadow: 0 10px 4px rgba(0,0,0,0.2); /* Sombra */
     padding: 100px;
+    font-weight: bold;
 }
+
+
 
 .card-body {
     padding: 0; /* Remover espaço interno padrão */
-}
-
+} 
