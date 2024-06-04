@@ -7,6 +7,7 @@ using MyTe.Services;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 
+
 namespace MyTe.Controllers
 {
     public class HorasController : Controller
@@ -14,6 +15,8 @@ namespace MyTe.Controllers
         private readonly WBSsService wbssService;
         private readonly FuncionariosService funcionariosService;
         private readonly HorasService horasService;
+
+        public int idWBS { get; private set; }
 
         public HorasController(
             HorasService horasService,
@@ -93,16 +96,12 @@ namespace MyTe.Controllers
         }
 
         [HttpGet]
-        public IActionResult ListarHorasDoFuncionario()
+        public IActionResult ListarHorasPorFuncionario(string emailFuncionario)
         {
             try
             {
-                var userLog = Utils.USERNAME;
-                var userEmailObject = funcionariosService.BuscarPorEmail(userLog!);
-                var funcionarioId = userEmailObject!.Id;
-
-                // Ajuste aqui para listar apenas as horas do funcionário logado
-                var horasDoFuncionario = horasService.ListarHorasPorFuncionario(funcionarioId);
+                // Aqui você filtra as horas do funcionário logado pelo e-mail
+                var horasDoFuncionario = horasService.ListarHorasPorFuncionario(emailFuncionario);
 
                 // Retorna a view "ListarHoras" passando a lista de horas registradas do funcionário logado como modelo
                 return View("ListarHoras", horasDoFuncionario);
@@ -114,20 +113,74 @@ namespace MyTe.Controllers
             }
         }
 
+        //[HttpGet]
+        //public IActionResult ListarHoras()
+        //{
+        //    try
+        //    {
+        //        var userLog = Utils.USERNAME;
+        //        var funcionario = funcionariosService.BuscarPorEmail(userLog!);
+
+        //        if (funcionario == null)
+        //        {
+        //            return BadRequest("Funcionário não encontrado.");
+        //        }
+
+        //        // Aqui você filtra as horas do funcionário logado pelo e-mail
+        //        var horasDoFuncionario = horasService.ListarHorasPorFuncionario(funcionario.Email!);
+
+        //        // Retorna a view "ListarHoras" passando a lista de horas registradas do funcionário logado como modelo
+        //        return View(horasDoFuncionario);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        // Se ocorrer um erro, retorna a view de erro com a mensagem de erro
+        //        return View("_Erro", e);
+        //    }
+        //}
+
         [HttpGet]
-        public IActionResult ListarHoras(int idWBS)
+        public IActionResult ListarHoras()
         {
             try
             {
-                ViewBag.ListaDeWBS = new SelectList(wbssService.ListarWBSsDTO(), "Id", "Descricao");
-                return View(horasService.ListarHoras(idWBS));
+                // Busca as horas do funcionário logado
+                var userLog = Utils.USERNAME;
+                var funcionario = funcionariosService.BuscarPorEmail(userLog!);
+                if (funcionario == null)
+                {
+                    return BadRequest("Funcionário não encontrado.");
+                }
+                var horasDoFuncionario = horasService.ListarHorasPorFuncionario(funcionario.Email!);
+
+                // Busca as informações de WBS para as horas encontradas
+                var wbsIds = horasDoFuncionario.Select(h => h.WBSId).Distinct().ToList();
+                var wbsInfo = wbssService.BuscarWBSsPorIds(wbsIds);
+
+                // Combina as informações de WBS com as horas
+                var horasComWBSInfo = from hora in horasDoFuncionario
+                                      join wbs in wbsInfo on hora.WBSId equals wbs.Id
+                                      select new LancamentoDeHora // Crie um novo objeto LancamentoDeHora
+                                      {
+                                          Id = hora.Id,
+                                          FuncionarioId = hora.FuncionarioId,
+                                          WBSId = hora.WBSId,
+                                          RegistroData = hora.RegistroData,
+                                          HorasTrabalhadas = hora.HorasTrabalhadas,
+                                          Funcionario = hora.Funcionario,
+                                          TipoWBS = wbs // Defina o TipoWBS como a WBS relacionada
+                                      };
+
+                // Converta para uma lista de LancamentoDeHora
+                var listaHoras = horasComWBSInfo.ToList();
+
+                return View(listaHoras);
             }
             catch (Exception e)
             {
                 return View("_Erro", e);
             }
         }
-
         public IActionResult ListarHorasLINQ(int idFuncionario)
         {
             try

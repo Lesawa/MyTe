@@ -67,25 +67,10 @@ namespace MyTe.Services
             }
             return lista.ToList();
         }
-
-        public IEnumerable<LancamentoDeHora> ListarHorasPorFuncionario(int funcionarioId)
+        public IEnumerable<LancamentoDeHora> ListarHorasPorFuncionario(string emailFuncionario)
         {
-            // Aqui você faria a consulta no banco de dados para recuperar as horas do funcionário
-            // Por exemplo, usando Entity Framework, você pode fazer algo assim:
-            return Context.Horas.Where(h => h.FuncionarioId == funcionarioId).ToList();
+            // Aqui você filtra as horas do funcionário logado pelo e-mail
+            return Context.Horas.Where(h => h.Funcionario!.Email == emailFuncionario).ToList();
         }
     }
-
-        //public IEnumerable<LancamentoDeHora> ListarHorasPorPeriodo(int funcionarioId, DateTime startDate, DateTime endDate)
-        //{
-        //    Console.WriteLine($"Consulta por Funcionario ID: {funcionarioId}, Start Date: {startDate}, End Date: {endDate}");
-
-        //    var resultado = Context.Horas
-        //        .Where(hora => hora.FuncionarioId == funcionarioId && hora.RegistroData >= startDate && hora.RegistroData <= endDate)
-        //        .ToList();
-
-        //    Console.WriteLine($"Resultado da Consulta: {JsonSerializer.Serialize(resultado)}");
-
-        //    return resultado;
-        //}
 }

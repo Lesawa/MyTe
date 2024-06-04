@@ -17,6 +17,10 @@ namespace MyTe.Services
             return WBSsDao.Listar();
         }
 
+        public IEnumerable<WBS> BuscarWBSsPorIds(List<int> ids)
+        {
+            return WBSsDao.Listar().Where(w => ids.Contains(w.Id)).ToList();
+        }
         public void Incluir(WBS wbs)
         {
             WBSsDao.Adicionar(wbs);
