@@ -57,10 +57,10 @@ namespace MyTe.Controllers
         }
 
         [HttpGet]
-        public IActionResult Login(string? returnUrl = null) 
-        { 
+        public IActionResult Login(string? returnUrl = null)
+        {
             //Verificar se há uma mensagem de sucesso na TempData
-            if(TempData.ContainsKey("SuccessMessage"))
+            if (TempData.ContainsKey("SuccessMessage"))
             {
                 ViewBag.SuccessMessage = TempData["SuccessMessage"];
             }
@@ -70,18 +70,16 @@ namespace MyTe.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LogonViewModel model,
-            string? returnUrl = null)
+        public async Task<IActionResult> Login(LogonViewModel model, string? returnUrl = null)
         {
             if (ModelState.IsValid)
             {
                 var loginSuccess = await authService.LoginUser(model);
-               
                 if (loginSuccess)
                 {
                     //Extrair a primeira parte do email do "@"
                     string userEmail = User.Identity!.Name;
-                    string username = userEmail.Split('@')[0];
+                    string username = userEmail!.Split('@')[0];
                     Utils.UsuarioLogado!.Usuario = username;
 
                     if (User.IsInRole("Administrador"))
@@ -104,11 +102,12 @@ namespace MyTe.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Credenciais inválidas");
+                    TempData["LoginError"] = "Credenciais inválidas";
                 }
             }
             return View(model);
         }
+
 
         [HttpGet]
 

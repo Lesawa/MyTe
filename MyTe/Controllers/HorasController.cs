@@ -101,13 +101,16 @@ namespace MyTe.Controllers
                 var userEmailObject = funcionariosService.BuscarPorEmail(userLog!);
                 var funcionarioId = userEmailObject!.Id;
 
+                // Ajuste aqui para listar apenas as horas do funcionário logado
                 var horasDoFuncionario = horasService.ListarHorasPorFuncionario(funcionarioId);
 
-                return Json(new { success = true, data = horasDoFuncionario });
+                // Retorna a view "ListarHoras" passando a lista de horas registradas do funcionário logado como modelo
+                return View("ListarHoras", horasDoFuncionario);
             }
             catch (Exception e)
             {
-                return Json(new { success = false, message = e.Message });
+                // Se ocorrer um erro, retorna a view de erro com a mensagem de erro
+                return View("_Erro", e);
             }
         }
 
@@ -173,36 +176,5 @@ namespace MyTe.Controllers
                 return View("_Erro", e);
             }
         }
-
-        // Método para buscar horas salvas por período
-        [HttpGet]
-        public IActionResult GetHorasSalvas(string startDate, string endDate)
-        {
-            try
-            {
-                var userLog = Utils.USERNAME;
-                var userEmailObject = funcionariosService.BuscarPorEmail(userLog!);
-                var funcionarioId = userEmailObject!.Id;
-
-                // Parse the date strings into DateTime
-                DateTime startDateTime = DateTime.Parse(startDate);
-                DateTime endDateTime = DateTime.Parse(endDate);
-
-                // Log para verificação
-                Console.WriteLine($"Funcionario ID: {funcionarioId}");
-                Console.WriteLine($"Start Date: {startDateTime}, End Date: {endDateTime}");
-
-                var horasSalvas = horasService.ListarHorasPorPeriodo(funcionarioId, startDateTime, endDateTime);
-
-                Console.WriteLine($"Horas Salvas: {JsonSerializer.Serialize(horasSalvas)}");
-
-                return Json(new { success = true, data = horasSalvas });
-            }
-            catch (Exception e)
-            {
-                return Json(new { success = false, message = e.Message });
-            }
-        }
-
     }
 }

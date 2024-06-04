@@ -4,68 +4,84 @@
     ViewData["Title"] = "ListarHoras";
 }
 
-<h1>Lista de Horas Lançadas</h1>
 
-<p>
-    @using (Html.BeginForm("ListarHoras", "Horas", FormMethod.Get))
-    {
-        <div class="mb-3">
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
 
-            @Html.Label("hora", "Escolha a WBS")
-            @Html.DropDownList("idWBS",
-                     (SelectList)ViewBag.ListaDeWBS,
-                     "TODOS", new { @class = "form-select" })
-        </div>
-        <div class="mb-3">
-            <input type="submit" value="Buscar" class="btn btn-dark" />
-        </div>
-    }
-</p>
-<table class="tabelas">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FuncionarioId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.WBSId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.RegistroData)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.HorasTrabalhadas)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
+<body>
+    <br />
+    <h1 class="mb-4 text-center" style="font-weight: bold; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); color: #890078;">Consulte seus lançamentos:</h1>
+    <div class="container">
+        <p>
+            <a asp-action="AdicionarHora" class="btn btn-outline-dark">
+                <i class="bi bi-arrow-left"></i>
+            </a>
+        </p>
+        <p>
+            @using (Html.BeginForm("ListarHorasDoFuncionario", "Horas", FormMethod.Get))
+            {
+                <div class="mb-3 d-inline-block" style="width: 1180px;">
+                    @Html.Label("hora", "Escolha uma data:", new { style = "font-weight: bold;" })
+                    <!-- Substituímos o DropDownList pela lista de horas do usuário logado -->
+                    <select name="idHora" class="form-select">
+                        @foreach (var hora in Model)
+                        {
+                            <option value="@hora.Id">@hora.RegistroData.ToShortDateString() - @hora.HorasTrabalhadas horas</option>
+                        }
+                    </select>
+                </div>
+                <div class="mb-3 d-inline-block" style="margin-left: 10px;">
+                    <input type="submit" value="Buscar" class="btn btn-dark" />
+                </div>
+            }
+        </p>
+        <table class="tabelas">
+            <thead>
+                <tr>
+                    @*                     <th>
+                    @Html.DisplayNameFor(model => model.Id)
+                    </th>
+                    *@<th>
+                    @Html.DisplayNameFor(model => model.FuncionarioId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.RegistroData)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.HorasTrabalhadas)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        @*                          <td>
                     @Html.DisplayFor(modelItem => item.Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FuncionarioId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.WBSId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.RegistroData)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.HorasTrabalhadas)
-                </td>
-                <td>
-                    <a asp-action="RemoverHora" asp-route-id="@item.Id">Remover</a>
-                    <a asp-action="AdicionarHora" asp-route-id="@item.Id">incluir</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                    </td>
+                    *@
+                    
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FuncionarioId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.RegistroData)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HorasTrabalhadas)
+                    </td>
+                    <td>
+                        <a asp-action="RemoverHora" asp-route-id="@item.Id"><i class="bi bi-trash3-fill custom-icon"></i></a>
+                    </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -13,7 +13,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - MyTe</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" /> 
-    <link rel="stylesheet" href="~/css/StyleSheet.css" asp-append-version="true" />  
+    <link rel="stylesheet" href="~/css/StyleSheet.css" asp-append-version="true" />
+    <link rel="icon" href="~/css/getsitelogo.png" type="image/png">
 </head>
 <body>
     @await RenderSectionAsync("SuccessMessage", required: false)
@@ -29,7 +30,7 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        @if (user.Identity.IsAuthenticated)
+                        @if (user.Identity!.IsAuthenticated)
                              @if (isAdmin)
                             {
                                 <li class="nav-item">
@@ -51,17 +52,17 @@
                             else if (isGeren)
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-white" asp-area="" asp-controller="Horas" asp-action="AdicionarHora">Lançamento de Horas</a>
+                                    <a class="nav-link text-white" asp-area="" asp-controller="Horas" asp-action="AdicionarHora">Lançamento</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-white" asp-area="" asp-controller="Horas" asp-action="ListarHorasLINQ">Gestão de Horas</a>
+                                    <a class="nav-link text-white" asp-area="" asp-controller="Horas" asp-action="ListarHorasLINQ">Gestão</a>
                                 </li>
                             }
-                            else
+@*                             else
                             {
                                 <partial name="_LayoutPartial" />
                             }
-                    </ul>
+ *@                    </ul>
                     <partial name="_LoginPartial"/>
                 </div>
             </div>

@@ -7,7 +7,7 @@ namespace MyTe.Models.Entities
     {
         public int Id { get; set; }
 
-        [DisplayName("Funciónário")]
+        [DisplayName("Funcionário")]
         public int FuncionarioId { get; set; }
         
         [DisplayName("Código WBS")]
@@ -20,7 +20,7 @@ namespace MyTe.Models.Entities
         public DateTime RegistroData { get; set; }
 
         [DisplayName("Horas  Trabalhadas")]
-        [Required(ErrorMessage = "Informe as horas trabalhadas", AllowEmptyStrings = false)]
+        [Required(ErrorMessage = "Informe as horas trabalhadas.", AllowEmptyStrings = false)]
         public double HorasTrabalhadas { get; set; }
 
         public Funcionario? Funcionario { get; set; }

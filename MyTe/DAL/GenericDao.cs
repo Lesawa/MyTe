@@ -46,10 +46,5 @@ namespace MyTe.DAL
             Context.Entry<T>(item).State = EntityState.Deleted;
             Context.SaveChanges();
         }
-
-        public static implicit operator GenericDao<T>(GenericDao<FortnightViewModel> v)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

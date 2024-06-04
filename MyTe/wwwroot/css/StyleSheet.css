@@ -14,37 +14,43 @@ body {
     margin: 0;
     padding: 0;
     background-image: url('avanade logo lines general left 02-02.png');
+    background-repeat: no-repeat;
 }
-
-
 /*Tabela de Horas linq*/
 /*Tamanho da tabela*/
+
 .tabelas {
-    width: auto;
     color: white;
     width: 100%;
+    max-width: 100%;
     border-collapse: collapse;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adicionando uma sombra */
 }
 
-    /*Coluna tabela*/
+    /* Coluna tabela */
     .tabelas td {
         color: black;
         padding: 8px;
         text-align: left;
     }
-    /*Linha tabela*/
+
+    /* Linha tabela */
     .tabelas th {
         background-color: #890078;
         padding: 8px;
         text-align: left;
     }
-    /*Linha alternativa da tabela*/
+
+    /* Linha alternativa da tabela */
     .tabelas tbody tr:nth-child(even) {
         background-color: #f9f9f9;
     }
+
     .tabelas tbody tr:nth-child(odd) {
         background-color: white;
     }
+
+
 
 /*Botões lixeira e lápis*/
 i {
@@ -64,7 +70,6 @@ i {
 }
 
 /*Alterar e Adicionar */
-
 .center-div {
     position: absolute;
     top: 55%;
@@ -82,8 +87,75 @@ i {
     font-weight: bold;
 }
 
-
-
 .card-body {
     padding: 0; /* Remover espaço interno padrão */
-} 
+}
+
+/* do login alerta pequeno */
+.alert-sm-custom {
+    padding: 1rem 1rem;
+    font-size: 0.875rem;
+}
+
+/* Estilo para a mensagem de erro LOGIN */
+.alert-sm-custom-error {
+    padding: 1rem 1rem;
+    font-size: 0.875rem;
+  
+}
+
+.Myte {
+    font-weight: bold;
+    color: white; /* Define a cor do texto como branco */
+    text-shadow: 2px 2px 4px #000000; /* Adiciona sombra ao texto */
+    text-align: center; /* Centraliza o texto */
+}
+
+.wbs-column {
+    width: 300px; /* Defina a largura desejada */
+}
+/* styles.css */
+
+.center-text {
+    text-align: center;
+}
+
+.error {
+    color: red;
+    display: none;
+    text-align: center;
+    font-weight: bold;
+    background-color: white;
+}
+
+.is-invalid {
+    border-color: red;
+}
+
+.is-invalid-feedback {
+    color: red;
+    font-size: 0.9em;
+    display: none;
+}
+
+.total-hours {
+    font-weight: bold;
+}
+/*Modal da inclusão das horas*/
+.custom-modal-content {
+    background-color: seagreen; /* Altere para a cor desejada */
+    color: #fff; /* Cor do texto */
+    border: none; /* Se quiser remover a borda */
+    border-radius: 10px; /* Raio das bordas, ajuste conforme necessário */
+    padding: 20px; /* Espaçamento interno, ajuste conforme necessário */
+    max-width: 600px; /* Largura máxima, ajuste conforme necessário */
+    width: 100%; /* Para garantir que ocupe todo o espaço disponível */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra, ajuste conforme necessário */
+}
+.exceeded-8-hours {
+    background-color: red; /* Cor de fundo para destacar a coluna */
+}
+
+.bi bi-arrow-left{
+    color: white;
+}

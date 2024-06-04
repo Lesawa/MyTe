@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.EntityFrameworkCore;
 using MyTe.DAL;
 using MyTe.Models.Contexts;
 using MyTe.Models.DTO;
@@ -71,20 +72,20 @@ namespace MyTe.Services
         {
             // Aqui você faria a consulta no banco de dados para recuperar as horas do funcionário
             // Por exemplo, usando Entity Framework, você pode fazer algo assim:
-            return Context.Horas.Where(hora => hora.FuncionarioId == funcionarioId).ToList();
-        }
-
-        public IEnumerable<LancamentoDeHora> ListarHorasPorPeriodo(int funcionarioId, DateTime startDate, DateTime endDate)
-        {
-            Console.WriteLine($"Consulta por Funcionario ID: {funcionarioId}, Start Date: {startDate}, End Date: {endDate}");
-
-            var resultado = Context.Horas
-                .Where(hora => hora.FuncionarioId == funcionarioId && hora.RegistroData >= startDate && hora.RegistroData <= endDate)
-                .ToList();
-
-            Console.WriteLine($"Resultado da Consulta: {JsonSerializer.Serialize(resultado)}");
-
-            return resultado;
+            return Context.Horas.Where(h => h.FuncionarioId == funcionarioId).ToList();
         }
     }
+
+        //public IEnumerable<LancamentoDeHora> ListarHorasPorPeriodo(int funcionarioId, DateTime startDate, DateTime endDate)
+        //{
+        //    Console.WriteLine($"Consulta por Funcionario ID: {funcionarioId}, Start Date: {startDate}, End Date: {endDate}");
+
+        //    var resultado = Context.Horas
+        //        .Where(hora => hora.FuncionarioId == funcionarioId && hora.RegistroData >= startDate && hora.RegistroData <= endDate)
+        //        .ToList();
+
+        //    Console.WriteLine($"Resultado da Consulta: {JsonSerializer.Serialize(resultado)}");
+
+        //    return resultado;
+        //}
 }

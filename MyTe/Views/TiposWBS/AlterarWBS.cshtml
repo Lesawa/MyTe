@@ -7,7 +7,8 @@
 
 <div class="row center-div">
     <div class="col-md-4 card">
-        <h1 class="text-center">Alteração WBS</h1>
+        <h1 style="text-align: center; font-weight: bold;">Alteração WBS</h1>
+
         <br>
         <form asp-action="AlterarWBS">
             <!-- Se a ação de incluir for bem-sucedida, exibir a mensagem -->
@@ -40,8 +41,8 @@
 
                 <select asp-for="Tipo" class="form-select">
                     <option value="0">SELECIONE O TIPO</option>
-                    <option value="1">1 - ALOCADO</option>
-                    <option value="2">2 - NÃO ALOCADO</option>
+                    <option value="1"> ALOCADO</option>
+                    <option value="2"> NÃO ALOCADO</option>
                 </select>
 
                 <span asp-validation-for="Tipo" class="text-danger"></span>
@@ -55,5 +56,3 @@
         </form>
     </div>
 </div>
-
-

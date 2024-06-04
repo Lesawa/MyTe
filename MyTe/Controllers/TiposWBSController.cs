@@ -26,7 +26,6 @@ namespace MyTe.Controllers
         }
 
         [HttpGet("wbs/adicionar/{id?}")]
-        
         public IActionResult IncluirWBS()
         {
             return View();

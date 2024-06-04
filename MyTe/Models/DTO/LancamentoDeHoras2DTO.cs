@@ -5,7 +5,7 @@ using System.Configuration;
 
 namespace MyTe.Models.DTO
 {
-    public class LancamentoDeHoraDTO
+    public class LancamentoDeHora2DTO
     {
         public int Id { get; set; }
 
@@ -39,8 +39,5 @@ namespace MyTe.Models.DTO
 
         [DisplayName("Horas Trabalhadas")]
         public double HorasTrabalhadas { get; set; }
-
-        public Funcionario? Funcionario { get; set; }
-        public WBS? TipoWBS { get; set; }
     }
 }
