@@ -6,6 +6,8 @@ using MyTe.Models.Entities;
 using MyTe.Services;
 using System.Text.Json.Serialization;
 using System.Text.Json;
+using X.PagedList;
+using X.PagedList.Mvc.Core;
 
 
 namespace MyTe.Controllers
@@ -113,37 +115,14 @@ namespace MyTe.Controllers
             }
         }
 
-        //[HttpGet]
-        //public IActionResult ListarHoras()
-        //{
-        //    try
-        //    {
-        //        var userLog = Utils.USERNAME;
-        //        var funcionario = funcionariosService.BuscarPorEmail(userLog!);
-
-        //        if (funcionario == null)
-        //        {
-        //            return BadRequest("Funcionário não encontrado.");
-        //        }
-
-        //        // Aqui você filtra as horas do funcionário logado pelo e-mail
-        //        var horasDoFuncionario = horasService.ListarHorasPorFuncionario(funcionario.Email!);
-
-        //        // Retorna a view "ListarHoras" passando a lista de horas registradas do funcionário logado como modelo
-        //        return View(horasDoFuncionario);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        // Se ocorrer um erro, retorna a view de erro com a mensagem de erro
-        //        return View("_Erro", e);
-        //    }
-        //}
-
         [HttpGet]
-        public IActionResult ListarHoras()
+        public IActionResult ListarHoras(int? page)
         {
             try
             {
+                // Define o número de itens por página
+                int pageSize = 15;
+
                 // Busca as horas do funcionário logado
                 var userLog = Utils.USERNAME;
                 var funcionario = funcionariosService.BuscarPorEmail(userLog!);
@@ -171,22 +150,34 @@ namespace MyTe.Controllers
                                           TipoWBS = wbs // Defina o TipoWBS como a WBS relacionada
                                       };
 
-                // Converta para uma lista de LancamentoDeHora
-                var listaHoras = horasComWBSInfo.ToList();
+                // Pagina os resultados
+                int pageNumber = page ?? 1; // Se a página não for especificada, padrão para 1
+                var listaPaginada = horasComWBSInfo.ToPagedList(pageNumber, pageSize);
 
-                return View(listaHoras);
+                return View(listaPaginada);
             }
             catch (Exception e)
             {
                 return View("_Erro", e);
             }
         }
-        public IActionResult ListarHorasLINQ(int idFuncionario)
+        public IActionResult ListarHorasLINQ(int idFuncionario, int? page)
         {
             try
             {
                 ViewBag.ListaDeFuncionario = new SelectList(funcionariosService.ListarFuncionariosDTO(), "Id", "Nome");
-                return View(horasService.ListarHorasLINQ(idFuncionario));
+
+                var pageNumber = page ?? 1;
+                var pageSize = 15;
+
+                var listaPaginada = horasService.ListarHorasLINQ(idFuncionario).ToPagedList(pageNumber, pageSize);
+
+                ViewBag.PageNumber = pageNumber;
+                ViewBag.PageCount = listaPaginada.PageCount;
+                ViewBag.HasPreviousPage = listaPaginada.HasPreviousPage;
+                ViewBag.HasNextPage = listaPaginada.HasNextPage;
+
+                return View(listaPaginada);
             }
             catch (Exception e)
             {

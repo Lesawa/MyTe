@@ -43,7 +43,7 @@ namespace MyTe.Services
                 funcionarios.Add(new FuncionarioDTO
                 {
                     Id = item.Id,
-                    Nome = item.Id + " - " + item.Nome
+                    Nome = item.Nome
                 });
             }
             return funcionarios;

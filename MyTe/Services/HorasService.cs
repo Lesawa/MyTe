@@ -59,7 +59,9 @@ namespace MyTe.Services
                             HorasTrabalhadas = h.HorasTrabalhadas,
                             FuncionarioId = f.Id,
                             NomeFuncionario = f.Nome,
-                            EmailFuncionario = f.Email
+                            EmailFuncionario = f.Email,
+                            WBSTipo = w.Tipo
+
                         };
             if (idFuncionario > 0)
             {

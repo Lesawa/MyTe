@@ -110,7 +110,6 @@ namespace MyTe.Controllers
 
 
         [HttpGet]
-
         public async Task<IActionResult> Logout()
         {
             await authService.LogoutUser();
